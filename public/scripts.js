@@ -1,10 +1,11 @@
 const socket = io('/')
 
 const g1 = document.querySelector('.g1')
-const newPeer = new Peer(undefined, {
-    host: '/',
-    port: '3001'
-})
+// const newPeer = new Peer(undefined, {
+//     host: '/',
+//     port: '3001'
+// })
+const newPeer = new Peer()
 const _nameSpecifier = "123d12dasf12fsc112casc"
 const _mssgSpecifier = "c59c8fce0a27c8334570c8de425caf08"
 const _terminator = "I am Using This String For Terminating The Send Protocol"
