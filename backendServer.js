@@ -33,6 +33,6 @@ io.on('connection', socket => { //Here Socket represent the User
     })
 })
 
-server.listen(3000, () => {
-    console.log('Project Started on http://localhost:3000')
-})
+server.listen(0, function() {
+    console.log('Listening on port ' + server.address().port);
+  });
