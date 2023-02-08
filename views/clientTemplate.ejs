@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>const ROOM_ID = "<%= createRoomID %>"</script>
+  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js" defer></script>
+  <script src='//js.zapjs.com/js/download.js'></script>
+  <script src="/socket.io/socket.io.js" defer> </script>
+  <script src="scripts.js" defer></script>
+  <link rel="stylesheet" href="./styles/style.css" type="text/css" />
+  <style>
+    .grid-container {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      padding: 10px;
+    }
+
+    .grid-item {
+      padding: 20px;
+      font-size: 30px;
+      text-align: center;
+    }
+  </style>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <title>CRAFT</title>
+</head>
+
+<body class="min-h-screen relative bg-gradient-to-r from-indigo-400 via-indigo-500 to-purple-600">
+  <div class="container py-10 px-12">
+    <div id="MainGrid" class="grid grid-cols-3 grid-flow-col gap-10 justify-evenly g1 divide-x-8 "></div>
+    <div class="absolute m-auto inset-x-0 bottom-0 text-center p-3 w-1/3 rounded-3xl bg-indigo-300 "> <!-- Self B-->
+      <span class="font-bold">You are</span><br><span class="" id="urID"></span>
+    </div>
+  </div>  
+
+</body>
+
+</html>
