@@ -1,10 +1,7 @@
 const socket = io('/')
 
 const g1 = document.querySelector('.g1')
-// const newPeer = new Peer(undefined, {
-//     host: '/',
-//     port: '3001'
-// })
+
 const newPeer = new Peer()
 const _nameSpecifier = "123d12dasf12fsc112casc"
 const _mssgSpecifier = "c59c8fce0a27c8334570c8de425caf08"
@@ -59,21 +56,6 @@ newPeer.on('connection', conn => {
             }
         })
     })
-    // conn.on('open', () => {
-    //     conn.on('data', data => {
-    //         if(data.dataType === "Message"){
-    //             alert(data.data)
-    //         }
-    //         else if (data.dataType === "HeaderName"){
-    //             headerInfo.push(data)
-    //         } 
-    //         else {
-    //             const file = new Blob([data])
-    //             download(file, headerInfo[headerInfo.length - 1].name, headerInfo[headerInfo.length - 1].type)
-
-    //         }
-    //     })
-    // })
 })
 
 socket.on('add-others', otherId => {
@@ -138,18 +120,6 @@ function addingDiv(div, id) {
                         });
                     })
             })
-            // conn.on('open', () => {
-            //     const file = fs.files[0]
-            //     conn.send({
-            //         dataType: "HeaderName",
-            //         name: file.name,
-            //         type: file.type
-            //     })
-            //     file.arrayBuffer()
-            //         .then(buffer => {
-            //             conn.send(buffer);
-            //         });
-            // })
         })
     })
     div.addEventListener('contextmenu', (rc) => {
