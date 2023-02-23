@@ -18,7 +18,8 @@
     "tailwindcss": "^3.2.4"
   },
   "scripts": {
-    "Prj": "nodemon backendServer.js",
+    "test": "nodemon backendServer.js",
+    "start":"node backendServer.js",
     "tailwind:css": "postcss public/styles/tailwind.css -o public/styles/style.css -w"
   },
   "author": "",
