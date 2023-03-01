@@ -10,10 +10,20 @@ const myDiv = document.createElement('div')
 let testFile
 var myId
 
+let qrDiv = document.getElementById("qrDiv")
+let qrImg = document.getElementById("qrImg")
+qrImg.src = ` https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${window.location.href}`
+
+
+document.getElementById("roomDiv").addEventListener('click', () => {
+    qrDiv.classList.remove('hidden')
+})
+document.getElementById("qrDiv").addEventListener('click', () => {
+    qrDiv.classList.add('hidden')
+})
 
 newPeer.on('open', id => {  //Creating the New Peer ID
     socket.emit('join-room', ROOM_ID, id) //Telling the room to join 
-    // addingDiv(myDiv, id)   //Adding your own id 
     myId = id
     $('#urID').text(id)
 })
@@ -76,10 +86,11 @@ socket.on('user-disconnected', removeId => {
 })
 
 function addingDiv(div, id) {
-    div.innerText = "USER"
+    div.innerText = `User
+    ${id}`
     div.setAttribute("id", id)
     div.setAttribute("title", id)
-    div.classList.add('p-5', '!w-24', '!h-24', 'font-bold', 'text-center', 'rounded-full', 'bg-indigo-300')
+    div.classList.add('text-xl', 'text-center', 'p-1', 'font-bold', 'content-center', 'rounded-3xl', 'bg-indigo-300')
     const fs = document.createElement('input')
     fs.type = "file"
 
@@ -126,13 +137,14 @@ function addingDiv(div, id) {
         rc.preventDefault()
         const conn = newPeer.connect(id)
         let mssg = prompt('Send Message')
-        console.log('Clicked')
-        conn.on('open', () => {
-            conn.send({
-                dataType: 'Message Sending Channel',
-                data: mssg
+        if(mssg != null){
+            conn.on('open', () => {
+                conn.send({
+                    dataType: 'Message Sending Channel',
+                    data: mssg
+                })
             })
-        })
+        }       
     })
     g1.append(div)
 }
