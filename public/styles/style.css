@@ -468,6 +468,9 @@ video {
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
+.invisible {
+  visibility: hidden;
+}
 .fixed {
   position: fixed;
 }
@@ -490,13 +493,15 @@ video {
 .bottom-0 {
   bottom: 0px;
 }
+.m-auto {
+  margin: auto;
+}
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
 }
-.my-1 {
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 .flex {
   display: flex;
@@ -504,20 +509,19 @@ video {
 .grid {
   display: grid;
 }
-.hidden {
-  display: none;
-}
-.\!hidden {
-  display: none !important;
-}
 .h-auto {
   height: auto;
+}
+.h-fit {
+  height: -moz-fit-content;
+  height: fit-content;
 }
 .min-h-screen {
   min-height: 100vh;
 }
-.w-1\/4 {
-  width: 25%;
+.w-fit {
+  width: -moz-fit-content;
+  width: fit-content;
 }
 .min-w-max {
   min-width: -moz-max-content;
@@ -536,13 +540,29 @@ video {
   }
 }
 .animate-fadeInDown {
-  animation: fadeInDown 1s;
+  animation: fadeInDown 500ms;
 }
-.grid-flow-col {
-  grid-auto-flow: column;
+@keyframes popIn {
+
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  90% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
-.grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.animate-popIn {
+  animation: popIn 0.3s;
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 .content-center {
   align-content: center;
@@ -553,19 +573,17 @@ video {
 .justify-center {
   justify-content: center;
 }
-.justify-evenly {
-  justify-content: space-evenly;
-}
 .gap-10 {
   gap: 2.5rem;
 }
-.divide-x-8 > :not([hidden]) ~ :not([hidden]) {
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(8px * var(--tw-divide-x-reverse));
-  border-left-width: calc(8px * calc(1 - var(--tw-divide-x-reverse)));
+.rounded-lg {
+  border-radius: 0.5rem;
 }
 .rounded {
   border-radius: 0.25rem;
+}
+.rounded-full {
+  border-radius: 9999px;
 }
 .bg-slate-300 {
   --tw-bg-opacity: 1;
@@ -590,6 +608,12 @@ video {
 .to-purple-600 {
   --tw-gradient-to: #9333ea;
 }
+.p-1 {
+  padding: 0.25rem;
+}
+.p-5 {
+  padding: 1.25rem;
+}
 .p-3 {
   padding: 0.75rem;
 }
@@ -601,12 +625,20 @@ video {
   padding-left: 3rem;
   padding-right: 3rem;
 }
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 .text-center {
   text-align: center;
-}
-.text-3xl {
-  font-size: 1.875rem;
-  line-height: 2.25rem;
 }
 .text-2xl {
   font-size: 1.5rem;
@@ -622,4 +654,16 @@ video {
   --tw-backdrop-blur: blur(4px);
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
           backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
+@media (min-width: 768px) {
+
+  .md\:grid-flow-row {
+    grid-auto-flow: row;
+  }
+}
+@media (min-width: 1024px) {
+
+  .lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }

@@ -1,7 +1,5 @@
 const socket = io('/')
 
-const g1 = document.querySelector('.g1')
-
 const newPeer = new Peer()
 const _nameSpecifier = "123d12dasf12fsc112casc"
 const _mssgSpecifier = "c59c8fce0a27c8334570c8de425caf08"
@@ -12,14 +10,14 @@ var myId
 
 let qrDiv = document.getElementById("qrDiv")
 let qrImg = document.getElementById("qrImg")
-qrImg.src = ` https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${window.location.href}`
+qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${window.location.href}`
 
 
 document.getElementById("roomDiv").addEventListener('click', () => {
-    qrDiv.classList.remove('hidden')
+    qrDiv.classList.toggle('invisible')
 })
 document.getElementById("qrDiv").addEventListener('click', () => {
-    qrDiv.classList.add('hidden')
+    qrDiv.classList.toggle('invisible')
 })
 
 newPeer.on('open', id => {  //Creating the New Peer ID
@@ -86,11 +84,10 @@ socket.on('user-disconnected', removeId => {
 })
 
 function addingDiv(div, id) {
-    div.innerText = `User
-    ${id}`
-    div.setAttribute("id", id)
+    div.classList.add('text-center','cursor-pointer', 'm-auto','py-3','px-4', 'rounded-full','bg-indigo-300','animate-popIn')
+    div.innerHTML = "<strong>User</strong> <br/>" + id
+    div.setAttribute("id", id) 
     div.setAttribute("title", id)
-    div.classList.add('text-xl', 'text-center', 'p-1', 'font-bold', 'content-center', 'rounded-3xl', 'bg-indigo-300')
     const fs = document.createElement('input')
     fs.type = "file"
 
@@ -137,14 +134,14 @@ function addingDiv(div, id) {
         rc.preventDefault()
         const conn = newPeer.connect(id)
         let mssg = prompt('Send Message')
-        if(mssg != null){
+        if (mssg != null) {
             conn.on('open', () => {
                 conn.send({
                     dataType: 'Message Sending Channel',
                     data: mssg
                 })
             })
-        }       
+        }
     })
-    g1.append(div)
+    document.getElementById('MainGrid').append(div)
 }
