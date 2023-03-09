@@ -36,28 +36,37 @@ newPeer.on('connection', conn => {
     conn.on('open', () => {
         conn.on('data', data => {
             try {
-                if (data.dataType === "Message Sending Channel") {
-                    alert(data.data)
+                if (conn.label === "messageChannel") {
+                    alert(conn.peer + " says " + data.data)
                 }
-                else if (data.dataType === "HeaderName of Sending File") {
-                    headerInfo.push(data)
-                }
-                else if (data.dataType === _terminator) {
-                    sortedChunks = fileChunks.sort((a, b) => {
-                        return parseInt(a.dataOrder) - parseInt(b.dataOrder)
-                    })
-                    console.log(sortedChunks)
-                    for (i in sortedChunks) {
-                        sortedData.push(sortedChunks[i].data)
+                else if (conn.label === "dataChannel") {
+                    if (data.dataType === "HeaderName of Sending File") {
+                        headerInfo.push(data)
                     }
-                    console.log(sortedData)
-                    const file = new Blob(sortedData);
-                    console.log('Received', file);
-                    download(file, headerInfo[headerInfo.length - 1].name, headerInfo[headerInfo.length - 1].type)
-                    //Removing Data of the headerInfo and fileChunks
-                }
-                else {
-                    fileChunks.push(data); // Keep appending various file chunks 
+                    else if (data.dataType === _terminator) {
+                        sortedChunks = fileChunks.sort((a, b) => {
+                            return parseInt(a.dataOrder) - parseInt(b.dataOrder)
+                        })
+                        console.log(sortedChunks)
+                        for (i in sortedChunks) {
+                            sortedData.push(sortedChunks[i].data)
+                        }
+                        console.log(sortedData)
+                        const file = new Blob(sortedData);
+                        console.log('Received', file);
+                        if (confirm(`User ${conn.peer} sent ${headerInfo[headerInfo.length - 1].name} `)) {
+                            download(file, headerInfo[headerInfo.length - 1].name, headerInfo[headerInfo.length - 1].type)
+                        }
+
+                        //Removing Data from arrays
+                        headerInfo.length = 0
+                        fileChunks.length = 0
+                        sortedChunks.length = 0
+                        sortedData.length = 0
+                    }
+                    else {
+                        fileChunks.push(data); // Keep appending various file chunks 
+                    }
                 }
             } catch (e) {
                 console.log(e + 'Error')
@@ -84,9 +93,9 @@ socket.on('user-disconnected', removeId => {
 })
 
 function addingDiv(div, id) {
-    div.classList.add('text-center','cursor-pointer', 'm-auto','py-3','px-4', 'rounded-full','bg-indigo-300','animate-popIn')
+    div.classList.add('text-center', 'cursor-pointer', 'm-auto', 'py-3', 'px-4', 'rounded-full', 'bg-indigo-300', 'animate-popIn')
     div.innerHTML = "<strong>User</strong> <br/>" + id
-    div.setAttribute("id", id) 
+    div.setAttribute("id", id)
     div.setAttribute("title", id)
     const fs = document.createElement('input')
     fs.type = "file"
@@ -95,7 +104,7 @@ function addingDiv(div, id) {
         fs.click()
         let n = 0
         fs.addEventListener('change', () => {
-            const conn = newPeer.connect(id)
+            const conn = newPeer.connect(id, { label: 'dataChannel', reliable: 'true' })
             conn.on('open', () => {
                 const file = fs.files[0]
                 conn.send({
@@ -116,10 +125,7 @@ function addingDiv(div, id) {
                             const chunk = buffer.slice(0, chunkSize);
                             buffer = buffer.slice(chunkSize, buffer.byteLength);
                             // Sending Chunks!
-                            conn.send({
-                                dataOrder: n++
-                                , data: chunk
-                            });
+                            conn.send({ dataOrder: n++, data: chunk });
                         }
 
                         // End message to signal that all chunks have been sent
@@ -132,13 +138,14 @@ function addingDiv(div, id) {
     })
     div.addEventListener('contextmenu', (rc) => {
         rc.preventDefault()
-        const conn = newPeer.connect(id)
+        const conn = newPeer.connect(id, { label: 'messageChannel' })
         let mssg = prompt('Send Message')
         if (mssg != null) {
             conn.on('open', () => {
                 conn.send({
                     dataType: 'Message Sending Channel',
-                    data: mssg
+                    data: mssg,
+                    dataConnectType: conn.label
                 })
             })
         }
