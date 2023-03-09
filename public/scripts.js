@@ -14,10 +14,10 @@ qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${win
 
 
 document.getElementById("roomDiv").addEventListener('click', () => {
-    qrDiv.classList.toggle('invisible')
+    qrDiv.classList.toggle('hidden')
 })
 document.getElementById("qrDiv").addEventListener('click', () => {
-    qrDiv.classList.toggle('invisible')
+    qrDiv.classList.toggle('hidden')
 })
 
 newPeer.on('open', id => {  //Creating the New Peer ID
@@ -93,7 +93,7 @@ socket.on('user-disconnected', removeId => {
 })
 
 function addingDiv(div, id) {
-    div.classList.add('text-center', 'cursor-pointer', 'm-auto', 'py-3', 'px-4', 'rounded-full', 'bg-indigo-300', 'animate-popIn')
+    div.classList.add('text-center', 'cursor-pointer', 'm-auto', 'py-3', 'px-5', 'rounded-full', 'bg-indigo-300', 'animate-popIn')
     div.innerHTML = "<strong>User</strong> <br/>" + id
     div.setAttribute("id", id)
     div.setAttribute("title", id)

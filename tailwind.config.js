@@ -20,8 +20,7 @@ module.exports = {
           opacity: 0,
           transform: 'scale(0)'
         },
-        '90%': {
-          
+        '90%': {  
           transform: 'scale(1.05)'
         },
         '100%': {
@@ -32,7 +31,7 @@ module.exports = {
 
       },
       animation:{
-        fadeInDown: "fadeInDown 500ms",
+        fadeInDown: "fadeInDown 0.5s",
         popIn: "popIn 0.3s",
       }
     },
