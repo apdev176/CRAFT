@@ -90,7 +90,7 @@ socket.on('user-disconnected', removeId => {
 })
 
 function addingDiv(div, id,userName) {
-    div.classList.add('text-center', 'select-none','capitalize ', 'cursor-pointer', 'm-auto', 'py-3', 'px-5', 'rounded-full', 'bg-indigo-300', 'animate-popIn')
+    div.classList.add('text-center', 'select-none','capitalize', 'cursor-pointer', 'm-auto', 'py-3', 'px-5', 'rounded-full', 'bg-indigo-300', 'animate-popIn')
     div.innerHTML = "<strong>User</strong> <br/>" + userName
     div.setAttribute("id", id)
     div.setAttribute("title", id)
