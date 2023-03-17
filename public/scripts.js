@@ -1,11 +1,10 @@
 const socket = io('/')
-
 const newPeer = new Peer()
 const _nameSpecifier = "123d12dasf12fsc112casc"
 const _mssgSpecifier = "c59c8fce0a27c8334570c8de425caf08"
 const _terminator = "I am Using This String For Terminating The Send Protocol"
 const myDiv = document.createElement('div')
-let testFile
+
 var myId
 
 let qrDiv = document.getElementById("qrDiv")
@@ -21,9 +20,10 @@ document.getElementById("qrDiv").addEventListener('click', () => {
 })
 
 newPeer.on('open', id => {  //Creating the New Peer ID
-    socket.emit('join-room', ROOM_ID, id) //Telling the room to join 
+    _urName = randomUsername
+    socket.emit('join-room', ROOM_ID, id,_urName) //Telling the room to join 
     myId = id
-    $('#urID').text(id)
+    $('#urID').text(_urName)
 })
 
 //Recieving Messages on Peer Connection
@@ -73,26 +73,25 @@ newPeer.on('connection', conn => {
     })
 })
 
-socket.on('add-others', otherId => {
+socket.on('add-others', (otherId,otherName) => {
     const otherDiv = document.createElement('div')
-    addingDiv(otherDiv, otherId)
+    addingDiv(otherDiv, otherId,otherName)
 
 })
-socket.on('user-connected', (userID, sId) => {
+socket.on('user-connected', (userID, sId,userName) => {
     console.log("User " + userID + " joined the room")
     const newDiv = document.createElement('div')
-    addingDiv(newDiv, userID)
-
-    socket.emit('myId-send', myId, sId)
+    addingDiv(newDiv, userID,userName)
+    socket.emit('myId-send', myId, sId,_urName)
 })
 
 socket.on('user-disconnected', removeId => {
     $("#" + removeId).remove()
 })
 
-function addingDiv(div, id) {
-    div.classList.add('text-center', 'select-none', 'cursor-pointer', 'm-auto', 'py-3', 'px-5', 'rounded-full', 'bg-indigo-300', 'animate-popIn')
-    div.innerHTML = "<strong>User</strong> <br/>" + id
+function addingDiv(div, id,userName) {
+    div.classList.add('text-center', 'select-none','capitalize ', 'cursor-pointer', 'm-auto', 'py-3', 'px-5', 'rounded-full', 'bg-indigo-300', 'animate-popIn')
+    div.innerHTML = "<strong>User</strong> <br/>" + userName
     div.setAttribute("id", id)
     div.setAttribute("title", id)
     const fs = document.createElement('input')
