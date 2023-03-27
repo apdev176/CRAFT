@@ -52,7 +52,7 @@ newPeer.on('connection', conn => {
                         }
                         const file = new Blob(sortedData);
                         console.log('Received', file);
-                        if (confirm(`User ${conn.peer} sent ${headerInfo[headerInfo.length - 1].name} `)) {
+                        if (confirm(`${document.getElementById(conn.peer).name} sent ${headerInfo[headerInfo.length - 1].name} `)) {
                             download(file, headerInfo[headerInfo.length - 1].name, headerInfo[headerInfo.length - 1].type)
                         }
 
@@ -92,6 +92,7 @@ socket.on('user-disconnected', removeId => {
 function addingBlock(label, id, userName) {
     label.classList.add(..._divClassList)
     label.innerHTML = "<strong>User</strong> <br/>" + userName
+    label.name = userName
     label.setAttribute("id", id)
     label.setAttribute("title", id)
     const fs = document.createElement('input')
