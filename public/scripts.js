@@ -4,7 +4,7 @@ const _nameSpecifier = "123d12dasf12fsc112casc"
 const _mssgSpecifier = "c59c8fce0a27c8334570c8de425caf08"
 const _terminator = "I am Using This String For Terminating The Send Protocol"
 const myDiv = document.createElement('div')
-
+const _divClassList = ['text-center', 'select-none', 'capitalize', 'cursor-pointer', 'm-auto', 'py-3', 'px-5', 'rounded-full', 'bg-indigo-300', 'animate-popIn']
 var myId
 
 let qrDiv = document.getElementById("qrDiv")
@@ -21,7 +21,7 @@ document.getElementById("qrDiv").addEventListener('click', () => {
 
 newPeer.on('open', id => {  //Creating the New Peer ID
     _urName = randomUsername
-    socket.emit('join-room', ROOM_ID, id,_urName) //Telling the room to join 
+    socket.emit('join-room', ROOM_ID, id, _urName) //Telling the room to join 
     myId = id
     $('#urID').text(_urName)
 })
@@ -37,7 +37,7 @@ newPeer.on('connection', conn => {
         conn.on('data', data => {
             try {
                 if (conn.label === "messageChannel") {
-                    alert(conn.peer + " says " + data.data)
+                    alert(data.dataSender + " says " + data.data)
                 }
                 else if (conn.label === "dataChannel") {
                     if (data.dataType === "HeaderName of Sending File") {
@@ -73,42 +73,40 @@ newPeer.on('connection', conn => {
     })
 })
 
-socket.on('add-others', (otherId,otherName) => {
-    const otherDiv = document.createElement('div')
-    addingDiv(otherDiv, otherId,otherName)
+socket.on('add-others', (otherId, otherName) => {
+    const otherLabel = document.createElement('label')
+    addingBlock(otherLabel, otherId, otherName)
 
 })
-socket.on('user-connected', (userID, sId,userName) => {
+socket.on('user-connected', (userID, sId, userName) => {
     console.log("User " + userID + " joined the room")
-    const newDiv = document.createElement('div')
-    addingDiv(newDiv, userID,userName)
-    socket.emit('myId-send', myId, sId,_urName)
+    const newLabel = document.createElement('label')
+    addingBlock(newLabel, userID, userName)
+    socket.emit('myId-send', myId, sId, _urName)
 })
 
 socket.on('user-disconnected', removeId => {
     $("#" + removeId).remove()
 })
 
-function addingDiv(div, id,userName) {
-    div.classList.add('text-center', 'select-none','capitalize', 'cursor-pointer', 'm-auto', 'py-3', 'px-5', 'rounded-full', 'bg-indigo-300', 'animate-popIn')
-    div.innerHTML = "<strong>User</strong> <br/>" + userName
-    div.setAttribute("id", id)
-    div.setAttribute("title", id)
+function addingBlock(label, id, userName) {
+    label.classList.add(..._divClassList)
+    label.innerHTML = "<strong>User</strong> <br/>" + userName
+    label.setAttribute("id", id)
+    label.setAttribute("title", id)
     const fs = document.createElement('input')
+    fs.classList.add('hidden')
     fs.type = "file"
-
-    div.addEventListener('click', () => { //Left Click EventListener
-        console.log('Div Clicked')
-        console.log(fs.files)
-        fs.click()
-        console.log('input Clicked')
-    })
-    fs.addEventListener('change', (fse) => {
+    fs.multiple = "true"
+    label.append(fs)
+    
+    fs.addEventListener('change', () => {
+        for(let i in fs.files){
+            
             let n = 0
-            console.log("Selecting Files")
             const conn = newPeer.connect(id, { label: 'dataChannel', reliable: 'true' })
             conn.on('open', () => {
-                const file = fs.files[0]
+                const file = fs.files[i]
                 console.log("Sending fileInfo")
                 conn.send({
                     dataType: "HeaderName of Sending File",
@@ -134,16 +132,15 @@ function addingDiv(div, id,userName) {
 
                         // End message to signal that all chunks have been sent
                         conn.send({ dataType: _terminator });
-                        console.log("File Sent")
 
-                        //Clearing data
-                        fs.value = ''
+                        
                     })
             })
-        
+        }
+
     })
 
-    div.addEventListener('contextmenu', (rc) => {
+    label.addEventListener('contextmenu', (rc) => {
         rc.preventDefault()
         const conn = newPeer.connect(id, { label: 'messageChannel' })
         let mssg = prompt('Send Message')
@@ -151,11 +148,12 @@ function addingDiv(div, id,userName) {
             conn.on('open', () => {
                 conn.send({
                     dataType: 'Message Sending Channel',
+                    dataSender:userName,
                     data: mssg,
                     dataConnectType: conn.label
                 })
             })
         }
     })
-    document.getElementById('MainGrid').append(div)
+    document.getElementById('MainGrid').append(label)
 }
